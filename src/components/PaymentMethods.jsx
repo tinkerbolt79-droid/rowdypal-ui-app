@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export default function Payments() {
+export default function PaymentMethods() {
   const { currentUser } = useAuth();
   
   // State for payment methods
@@ -262,60 +262,60 @@ export default function Payments() {
     let errorMessage = '';
     
     switch(fieldName) {
-    case 'name':
-      if (value && value.trim().length < 3) {
-        errorMessage = 'Cardholder name must be at least 3 characters long';
-      }
-      break;
-        
-    case 'number':
-      if (value) {
-        const cleanCardNumber = value.replace(/\s+/g, '');
-        if (cleanCardNumber.length > 0 && cleanCardNumber.length < 13) {
-          errorMessage = 'Credit card numbers must be at least 13 digits';
-        } else if (cleanCardNumber.length >= 13 && !isValidCreditCard(cleanCardNumber)) {
-          errorMessage = 'Please enter a valid credit card number';
+      case 'name':
+        if (value && value.trim().length < 3) {
+          errorMessage = 'Cardholder name must be at least 3 characters long';
         }
-      }
-      break;
+        break;
         
-    case 'expiry':
-      if (value && !isValidExpiryDate(value)) {
-        errorMessage = 'Please enter a valid expiry date in MM/YY format';
-      }
-      break;
+      case 'number':
+        if (value) {
+          const cleanCardNumber = value.replace(/\s+/g, '');
+          if (cleanCardNumber.length > 0 && cleanCardNumber.length < 13) {
+            errorMessage = 'Credit card numbers must be at least 13 digits';
+          } else if (cleanCardNumber.length >= 13 && !isValidCreditCard(cleanCardNumber)) {
+            errorMessage = 'Please enter a valid credit card number';
+          }
+        }
+        break;
         
-    case 'cvv':
-      if (value && !isValidCVV(value)) {
-        errorMessage = 'CVV must be 3 or 4 digits';
-      }
-      break;
+      case 'expiry':
+        if (value && !isValidExpiryDate(value)) {
+          errorMessage = 'Please enter a valid expiry date in MM/YY format';
+        }
+        break;
+        
+      case 'cvv':
+        if (value && !isValidCVV(value)) {
+          errorMessage = 'CVV must be 3 or 4 digits';
+        }
+        break;
         
       // Bank account validations
-    case 'bankName':
-      if (value && value.trim().length < 2) {
-        errorMessage = 'Bank name must be at least 2 characters long';
-      }
-      break;
+      case 'bankName':
+        if (value && value.trim().length < 2) {
+          errorMessage = 'Bank name must be at least 2 characters long';
+        }
+        break;
         
-    case 'routingNumber':
-      if (value && value.length > 0 && value.length < 9) {
-        errorMessage = 'Routing number must be 9 digits';
-      } else if (value && value.length === 9 && !/^\d{9}$/.test(value)) {
-        errorMessage = 'Routing number must contain only digits';
-      }
-      break;
+      case 'routingNumber':
+        if (value && value.length > 0 && value.length < 9) {
+          errorMessage = 'Routing number must be 9 digits';
+        } else if (value && value.length === 9 && !/^\d{9}$/.test(value)) {
+          errorMessage = 'Routing number must contain only digits';
+        }
+        break;
         
-    case 'accountNumber':
-      if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
-        errorMessage = 'Account number must be between 6 and 17 digits';
-      } else if (value && !/^\d+$/.test(value)) {
-        errorMessage = 'Account number must contain only digits';
-      }
-      break;
+      case 'accountNumber':
+        if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
+          errorMessage = 'Account number must be between 6 and 17 digits';
+        } else if (value && !/^\d+$/.test(value)) {
+          errorMessage = 'Account number must contain only digits';
+        }
+        break;
         
-    default:
-      break;
+      default:
+        break;
     }
     
     // Only update error if there's a new error or clearing an existing one
@@ -336,30 +336,30 @@ export default function Payments() {
     let errorMessage = '';
     
     switch(fieldName) {
-    case 'bankName':
-      if (value && value.trim().length < 2) {
-        errorMessage = 'Bank name must be at least 2 characters long';
-      }
-      break;
+      case 'bankName':
+        if (value && value.trim().length < 2) {
+          errorMessage = 'Bank name must be at least 2 characters long';
+        }
+        break;
         
-    case 'routingNumber':
-      if (value && value.length > 0 && value.length < 9) {
-        errorMessage = 'Routing number must be 9 digits';
-      } else if (value && value.length === 9 && !/^\d{9}$/.test(value)) {
-        errorMessage = 'Routing number must contain only digits';
-      }
-      break;
+      case 'routingNumber':
+        if (value && value.length > 0 && value.length < 9) {
+          errorMessage = 'Routing number must be 9 digits';
+        } else if (value && value.length === 9 && !/^\d{9}$/.test(value)) {
+          errorMessage = 'Routing number must contain only digits';
+        }
+        break;
         
-    case 'accountNumber':
-      if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
-        errorMessage = 'Account number must be between 6 and 17 digits';
-      } else if (value && !/^\d+$/.test(value)) {
-        errorMessage = 'Account number must contain only digits';
-      }
-      break;
+      case 'accountNumber':
+        if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
+          errorMessage = 'Account number must be between 6 and 17 digits';
+        } else if (value && !/^\d+$/.test(value)) {
+          errorMessage = 'Account number must contain only digits';
+        }
+        break;
         
-    default:
-      break;
+      default:
+        break;
     }
     
     // Only update error if there's a new error or clearing an existing one
