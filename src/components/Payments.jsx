@@ -4,7 +4,7 @@ import { collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } 
 import { db } from '../firebase';
 
 export default function Payments() {
-  const { currentUser } = useAuth();
+ const{ currentUser } = useAuth();
   
   // State for payment methods
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -21,7 +21,7 @@ export default function Payments() {
     cvv: '',
     bankName: '',
     accountType: 'checking',
-    routingNumber: '',
+    routingNumber:'',
     accountNumber: ''
   });
   // Validation states
@@ -34,7 +34,7 @@ export default function Payments() {
       
       try {
         setLoading(true);
-        const q = query(
+const q = query(
           collection(db, 'paymentMethods'),
           where('userId', '==', currentUser.uid)
         );
@@ -65,7 +65,7 @@ export default function Payments() {
     // Clear error for this field when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => {
-        const newErrors = { ...prev };
+        const newErrors={ ...prev };
         delete newErrors[name];
         return newErrors;
       });
@@ -77,8 +77,8 @@ export default function Payments() {
     }
   };
 
-  const handleCardholderNameChange = (e) => {
-    let { value } = e.target;
+  const handleCardholderNameChange = (e)=> {
+let { value } = e.target;
     
     // Allow only letters, spaces, hyphens, and apostrophes
     value = value.replace(/[^a-zA-Z\s\-']/g, '');
@@ -88,7 +88,7 @@ export default function Payments() {
       name: value
     }));
     
-    // Clear error for this field when user starts typing
+   // Clearerror for this field when user starts typing
     if (formErrors.name) {
       setFormErrors(prev => {
         const newErrors = { ...prev };
@@ -129,7 +129,7 @@ export default function Payments() {
     
     // Auto-add slash after 2 digits
     if (value.length >= 3) {
-      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      value = value.substring(0, 2) + '/'+ value.substring(2, 4);
     }
     
     setFormData(prev => ({
@@ -153,10 +153,10 @@ export default function Payments() {
   const handleCVVChange = (e) => {
     let { value } = e.target;
     
-    // Remove all non-digit characters
+    //Removeall non-digit characters
     value = value.replace(/\D/g, '');
     
-    // Limit to max 4 digits
+    // Limitto max 4 digits
     if (value.length > 4) {
       value = value.substring(0, 4);
     }
@@ -164,7 +164,7 @@ export default function Payments() {
     setFormData(prev => ({
       ...prev,
       cvv: value
-    }));
+}));
     
     // Clear error for this field when user starts typing
     if (formErrors.cvv) {
@@ -175,11 +175,10 @@ export default function Payments() {
       });
     }
     
-    // Real-time validation for CVV
-    validateFieldOnInput('cvv', value);
+    // Real-time validation for CVVvalidateFieldOnInput('cvv', value);
   };
   
-  const validateFieldOnInput = (fieldName, value) => {
+  const validateFieldOnInput =(fieldName, value) => {
     let errorMessage = '';
     
     switch(fieldName) {
@@ -190,11 +189,11 @@ export default function Payments() {
         break;
         
       case 'number':
-        if (value) {
+       if (value) {
           const cleanCardNumber = value.replace(/\s+/g, '');
           if (cleanCardNumber.length > 0 && cleanCardNumber.length < 13) {
             errorMessage = 'Credit card numbers must be at least 13 digits';
-          } else if (cleanCardNumber.length >= 13 && !isValidCreditCard(cleanCardNumber)) {
+          } else if (cleanCardNumber.length>= 13 && !isValidCreditCard(cleanCardNumber)) {
             errorMessage = 'Please enter a valid credit card number';
           }
         }
@@ -212,6 +211,29 @@ export default function Payments() {
         }
         break;
         
+      //Bank account validations
+      case 'bankName':
+        if (value && value.trim().length < 2) {
+          errorMessage = 'Bank name must be at least 2 characters long';
+        }
+        break;
+        
+      case 'routingNumber':
+        if (value && value.length > 0 && value.length <9) {
+          errorMessage = 'Routing number must be 9 digits';
+        } else if (value && value.length === 9 && !/^\d{9}$/.test(value)) {
+          errorMessage = 'Routing number must contain only digits';
+        }
+        break;
+        
+      case 'accountNumber':
+       if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
+          errorMessage = 'Account number must be between 6 and 17 digits';
+        } else if (value && !/^\d+$/.test(value)) {
+          errorMessage = 'Account numbermust contain only digits';
+        }
+        break;
+        
       default:
         break;
     }
@@ -220,17 +242,17 @@ export default function Payments() {
     if (errorMessage || formErrors[fieldName]) {
       setFormErrors(prev => {
         const newErrors = { ...prev };
-        if (errorMessage) {
+       if(errorMessage) {
           newErrors[fieldName] = errorMessage;
         } else {
           delete newErrors[fieldName];
         }
-        return newErrors;
+       return newErrors;
       });
     }
   };
 
-  const handleAddNew = () => {
+const handleAddNew = () => {
     setShowAddForm(true);
     setFormData({
       name: '',
@@ -240,7 +262,7 @@ export default function Payments() {
       bankName: '',
       accountType: 'checking',
       routingNumber: '',
-      accountNumber: ''
+     accountNumber: ''
     });
   };
 
@@ -257,23 +279,23 @@ export default function Payments() {
     setFormErrors({});
     const errors = {};
     try {
-      // Validate form data based on payment type
-      if (paymentType === 'credit') {
+     // Validate form data based on payment type
+      if(paymentType === 'credit') {
         // Validate credit card fields
         if (!formData.name) {
           errors.name = 'Cardholder name is required';
         } else if (formData.name.trim().length < 3) {
           errors.name = 'Cardholder name must be at least 3 characters long';
-        }
+}
         
         if (!formData.number) {
           errors.number = 'Card number is required';
         } else {
           const cleanCardNumber = formData.number.replace(/\s+/g, '');
           if (!isValidCreditCard(cleanCardNumber)) {
-            errors.number = 'Please enter a valid credit card number';
+            errors.number ='Please enter a valid credit card number';
           }
-        }
+       }
         
         if (!formData.expiry) {
           errors.expiry = 'Expiry date is required';
@@ -282,14 +304,14 @@ export default function Payments() {
         }
         
         // Validate CVV if provided
-        if (formData.cvv && !isValidCVV(formData.cvv)) {
+if (formData.cvv && !isValidCVV(formData.cvv)) {
           errors.cvv = 'CVV must be 3 or 4 digits';
         }
       } else {
         // Validate bank account fields
-        if (!formData.bankName) {
+        if (!formData.bankName){
           errors.bankName = 'Bank name is required';
-        }
+       }
         
         if (!formData.routingNumber) {
           errors.routingNumber = 'Routing number is required';
@@ -298,13 +320,13 @@ export default function Payments() {
         }
         
         if (!formData.accountNumber) {
-          errors.accountNumber = 'Account number is required';
+         errors.accountNumber = 'Account number is required';
         } else if (!/^\d{6,17}$/.test(formData.accountNumber)) {
           errors.accountNumber = 'Account number must be between 6 and 17 digits';
         }
-      }
+}
       
-      // If there are validation errors, set them and return
+      // If there are validation errors, set them andreturn
       if (Object.keys(errors).length > 0) {
         setFormErrors(errors);
         setError('Please fix the errors below');
@@ -315,16 +337,16 @@ export default function Payments() {
       const paymentData = {
         userId: currentUser.uid,
         type: paymentType,
-        isPrimary: paymentMethods.length === 0, // First payment method is primary by default
+        isPrimary:paymentMethods.length === 0, // First payment method is primary by default
         ...formData,
         createdAt: new Date()
       };
       
       // Remove unused fields based on payment type
       if (paymentType === 'credit') {
-        delete paymentData.bankName;
+        deletepaymentData.bankName;
         delete paymentData.accountType;
-        delete paymentData.routingNumber;
+        deletepaymentData.routingNumber;
         delete paymentData.accountNumber;
       } else {
         delete paymentData.name;
@@ -333,9 +355,9 @@ export default function Payments() {
         delete paymentData.cvv;
       }
       
-      const docRef = await addDoc(collection(db, 'paymentMethods'), paymentData);
+      const docRef = awaitaddDoc(collection(db, 'paymentMethods'), paymentData);
       
-      setPaymentMethods(prev => [
+     setPaymentMethods(prev => [
         ...prev,
         { 
           id: docRef.id, ...paymentData
@@ -346,21 +368,21 @@ export default function Payments() {
       setShowAddForm(false);
       setFormData({
         name: '',
-        number: '',
+        number:'',
         expiry: '',
         cvv: '',
         bankName: '',
-        accountType: 'checking',
+accountType: 'checking',
         routingNumber: '',
         accountNumber: ''
       });
     } catch (err) {
       console.error('Error saving payment method:', err);
       setError('Failed to save payment method. Please try again.');
-    }
+}
   };
 
-  const handleDelete = async (paymentMethodId) => {
+  const handleDelete = async (paymentMethodId) =>{
     if (window.confirm('Are you sure you want to delete this payment method?')) {
       try {
         await deleteDoc(doc(db, 'paymentMethods', paymentMethodId));
@@ -373,14 +395,14 @@ export default function Payments() {
   };
 
   // Set a payment method as primary
-  const setAsPrimary = async (paymentMethodId) => {
+  const setAsPrimary = async (paymentMethodId) =>{
     try {
       // First, unset all other payment methods as primary
-      const updatedMethods = paymentMethods.map(method => {
+     const updatedMethods = paymentMethods.map(method => {
         if (method.id !== paymentMethodId && method.isPrimary) {
           // Update in Firestore
           const paymentMethodRef = doc(db, 'paymentMethods', method.id);
-          updateDoc(paymentMethodRef, { isPrimary: false });
+         updateDoc(paymentMethodRef, { isPrimary: false });
           return { ...method, isPrimary: false };
         }
         return method;
@@ -391,7 +413,7 @@ export default function Payments() {
       await updateDoc(paymentMethodRef, { isPrimary: true });
       
       // Update local state
-      setPaymentMethods(
+     setPaymentMethods(
         updatedMethods.map(method => 
           method.id === paymentMethodId 
             ? { ...method, isPrimary: true } 
@@ -400,7 +422,7 @@ export default function Payments() {
       );
     } catch (err) {
       console.error('Error setting primary payment method:', err);
-      setError('Failed to set primary payment method. Please try again.');
+      setError('Failed to set primarypayment method. Please try again.');
     }
   };
 
@@ -411,15 +433,14 @@ export default function Payments() {
   };
 
   const maskAccountNumber = (number) => {
-    if (!number) return '';
+    if(!number) return '';
     return `****${number.slice(-4)}`;
   };
 
   const formatCardNumber = (value) => {
     // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
-    
-    // Limit to max 19 digits (maximum for most credit cards)
+// Limit to max 19 digits (maximum for most credit cards)
     const limited = cleaned.substring(0, 19);
     
     // Format as groups of 4 digits
@@ -438,7 +459,7 @@ export default function Payments() {
   };
 
   const getCardType = (cardNumber) => {
-    // Remove spaces and dashes
+   // Remove spaces and dashes
     const cleaned = cardNumber.replace(/[\s-]/g, '');
     
     // Define card patterns
@@ -451,14 +472,14 @@ export default function Payments() {
     };
     
     // Check card type
-    for (let card in cards) {
+for (let card in cards) {
       if (cards[card].test(cleaned)) {
         return card.charAt(0).toUpperCase() + card.slice(1);
       }
     }
     
     return null;
-  };
+ };
 
   const getCardTypeHelpText = (cardNumber) => {
     if (!cardNumber) {
@@ -467,13 +488,13 @@ export default function Payments() {
     
     const cardType = getCardType(cardNumber);
     if (cardType) {
-      return `Detected: ${cardType}. Enter the full card number.`;
+return `Detected: ${cardType}. Enter the full card number.`;
     }
     
-    // Check if it looks like a partial card number
+   // Check if it looks like a partial card number
     const cleaned = cardNumber.replace(/[\s-]/g, '');
     if (cleaned.length > 0 && cleaned.length < 13) {
-      return 'Credit card numbers typically have 13-19 digits';
+return 'Credit card numbers typically have 13-19 digits';
     }
     
     return 'Enter a valid credit card number';
@@ -499,7 +520,7 @@ export default function Payments() {
             border: 2px solid #e74c3c !important;
           }
           .error-text {
-            color: #e74c3c;
+            color:#e74c3c;
             font-size: 0.875rem;
             margin-top: 0.25rem;
           }
@@ -523,15 +544,14 @@ export default function Payments() {
         <div className="payment-form-container">
           <h3>Add New Payment Method</h3>
           <div className="form-group">
-            <label>Payment Type</label>
+<label>Payment Type</label>
             <div className="payment-type-selector">
               <button
                 type="button"
                 className={`payment-type-btn ${paymentType === 'credit' ? 'selected' : ''}`}
                 onClick={() => setPaymentType('credit')}
               >
-                Credit/Debit Card
-              </button>
+                Credit/Debit Card</button>
               <button
                 type="button"
                 className={`payment-type-btn ${paymentType === 'bank' ? 'selected' : ''}`}
@@ -546,13 +566,13 @@ export default function Payments() {
             {paymentType === 'credit' ? (
               <>
                 <div className="form-group">
-                  <label>Cardholder Name *</label>
+                 <label>Cardholder Name *</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleCardholderNameChange}
-                    className={formErrors.name ? 'error-input' : ''}
+                   className={formErrors.name ? 'error-input' : ''}
                     required
                   />
                   {formErrors.name && <div className="error-text">{formErrors.name}</div>}
@@ -582,13 +602,13 @@ export default function Payments() {
                       type="text"
                       name="expiry"
                       value={formData.expiry}
-                      onChange={handleExpiryChange}
+                     onChange={handleExpiryChange}
                       className={formErrors.expiry ? 'error-input' : ''}
                       placeholder="MM/YY"
                       required
                     />
                     <div className="helper-text">Format: MM/YY (e.g., 12/25)</div>
-                    {formErrors.expiry && <div className="error-text">{formErrors.expiry}</div>}
+                    {formErrors.expiry&& <div className="error-text">{formErrors.expiry}</div>}
                   </div>
                   
                   <div className="form-group">
@@ -612,22 +632,22 @@ export default function Payments() {
                   <label>Bank Name *</label>
                   <input
                     type="text"
-                    name="bankName"
+name="bankName"
                     value={formData.bankName}
                     onChange={handleInputChange}
-                    className={formErrors.bankName ? 'error-input' : ''}
+                    className={formErrors.bankName ?'error-input' : ''}
                     required
                   />
                   {formErrors.bankName && <div className="error-text">{formErrors.bankName}</div>}
                 </div>
                 
-                <div className="form-group">
+               <div className="form-group">
                   <label>Account Type</label>
                   <div className="account-type-selector">
                     <button
                       type="button"
                       className={`account-type-btn ${formData.accountType === 'checking' ? 'selected' : ''}`}
-                      onClick={() => setFormData({ ...formData, accountType: 'checking' })}
+                      onClick={() => setFormData({ ...formData,accountType: 'checking' })}
                     >
                       Checking
                     </button>
@@ -635,7 +655,7 @@ export default function Payments() {
                       type="button"
                       className={`account-type-btn ${formData.accountType === 'savings' ? 'selected' : ''}`}
                       onClick={() => setFormData({ ...formData, accountType: 'savings' })}
-                    >
+>
                       Savings
                     </button>
                   </div>
@@ -647,7 +667,7 @@ export default function Payments() {
                     type="text"
                     name="routingNumber"
                     value={formData.routingNumber}
-                    onChange={handleInputChange}
+                    onChange={handleRoutingNumberChange}
                     className={formErrors.routingNumber ? 'error-input' : ''}
                     required
                   />
@@ -656,7 +676,7 @@ export default function Payments() {
                 </div>
                 
                 <div className="form-group">
-                  <label>Account Number *</label>
+                 <label>Account Number *</label>
                   <input
                     type="text"
                     name="accountNumber"
@@ -667,7 +687,7 @@ export default function Payments() {
                   />
                   <div className="helper-text">6-17 digits</div>
                   {formErrors.accountNumber && <div className="error-text">{formErrors.accountNumber}</div>}
-                </div>
+               </div>
               </>
             )}
             
@@ -677,13 +697,12 @@ export default function Payments() {
                 className="btn-secondary"
                 onClick={cancelForm}
               >
-                Cancel
-              </button>
+                Cancel</button>
               <button 
                 type="submit" 
                 className="btn-primary"
               >
-                Add Payment Method
+                AddPayment Method
               </button>
             </div>
           </form>
@@ -691,9 +710,9 @@ export default function Payments() {
       )}
 
       <div className="payment-methods-list">
-        {paymentMethods.length === 0 ? (
+        {paymentMethods.length === 0 ?(
           <p className="no-payments">No payment methods found. Add your first payment method!</p>
-        ) : (
+        ): (
           <>
             <h3>Saved Payment Methods</h3>
             <div className="payment-methods-grid">
@@ -708,16 +727,16 @@ export default function Payments() {
                         </div>
                         <div className="card-actions">
                           <button 
-                            className="btn-primary-small"
+                           className="btn-primary-small"
                             onClick={() => setAsPrimary(method.id)}
                             disabled={method.isPrimary}
                           >
                             {method.isPrimary ? 'Primary' : 'Set as Primary'}
-                          </button>
+</button>
                           {!method.isPrimary && (
                             <button 
                               className="btn-delete-small"
-                              onClick={() => handleDelete(method.id)}
+                              onClick={() =>handleDelete(method.id)}
                               title="Delete payment method"
                             >
                               ✕
@@ -731,12 +750,12 @@ export default function Payments() {
                         <p><strong>Expiry:</strong> {method.expiry}</p>
                       </div>
                     </>
-                  ) : (
+                  ) :(
                     <>
                       <div className="card-header">
                         <div>
                           <h4>Bank Account</h4>
-                          {method.isPrimary && <span className="primary-badge">Primary</span>}
+{method.isPrimary && <span className="primary-badge">Primary</span>}
                         </div>
                         <div className="card-actions">
                           <button 
@@ -744,8 +763,8 @@ export default function Payments() {
                             onClick={() => setAsPrimary(method.id)}
                             disabled={method.isPrimary}
                           >
-                            {method.isPrimary ? 'Primary' : 'Set as Primary'}
-                          </button>
+                            {method.isPrimary ?'Primary' : 'Set as Primary'}
+                         </button>
                           {!method.isPrimary && (
                             <button 
                               className="btn-delete-small"
@@ -758,7 +777,7 @@ export default function Payments() {
                         </div>
                       </div>
                       <div className="card-details">
-                        <p><strong>Bank:</strong> {method.bankName}</p>
+<p><strong>Bank:</strong> {method.bankName}</p>
                         <p><strong>Account Type:</strong> {method.accountType}</p>
                         <p><strong>Routing Number:</strong> {maskCardNumber(method.routingNumber)}</p>
                         <p><strong>Account Number:</strong> {maskAccountNumber(method.accountNumber)}</p>
@@ -787,7 +806,7 @@ const isValidCreditCard = (cardNumber) => {
   
   // Luhn algorithm implementation
   let sum = 0;
-  let isEven = false;
+  let isEven= false;
   
   // Loop through values starting from the rightmost side
   for (let i = cleaned.length - 1; i >= 0; i--) {
@@ -795,7 +814,7 @@ const isValidCreditCard = (cardNumber) => {
     
     if (isEven) {
       digit *= 2;
-      if (digit > 9) {
+      if (digit>9) {
         digit -= 9;
       }
     }
@@ -807,7 +826,7 @@ const isValidCreditCard = (cardNumber) => {
 
 const isValidExpiryDate = (expiry) => {
   // Check format (MM/YY)
-  const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+  const regex =/^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
   const match = expiry.match(regex);
   
   if (!match) {
@@ -816,14 +835,13 @@ const isValidExpiryDate = (expiry) => {
   
   const month = parseInt(match[1]);
   const year = parseInt(match[2]);
-  
-  // Get current date
+// Get current date
   const now = new Date();
   const currentYear = now.getFullYear() % 100;
   const currentMonth = now.getMonth() + 1;
   
   // Check if the card is expired
-  if (year < currentYear || (year === currentYear && month < currentMonth)) {
+  if (year < currentYear || (year === currentYear && month <currentMonth)) {
     return false;
   }
   
@@ -838,4 +856,117 @@ const isValidExpiryDate = (expiry) => {
 const isValidCVV = (cvv) => {
   // CVV should be 3 or 4 digits
   return /^\d{3,4}$/.test(cvv);
+};
+
+const handleRoutingNumberChange = (e) => {
+ let{value } = e.target;
+  
+// Removeall non-digit characters
+  value=value.replace(/\D/g, '');
+  
+// Limitto max 9digits
+ if(value.length >9) {
+   value= value.substring(0, 9);
+ }
+setFormData(prev=> ({
+   ...prev,
+   routingNumber: value}));
+// Clearerror for this field when user starts typing
+ if(formErrors.routingNumber) {
+   setFormErrors(prev=> {
+     const newErrors = { ...prev };
+     deletenewErrors.routingNumber;
+     returnnewErrors;
+   });
+}
+// Real-time validation for routingnumber
+ validateBankFieldOnInput('routingNumber', value);
+};
+const handleAccountNumberChange = (e) => {
+ let { value }= e.target;
+  
+  // Remove all non-digit characters
+  value = value.replace(/\D/g, '');
+  
+  // Limit to max 17digits
+ if(value.length > 17) {
+   value= value.substring(0, 17);
+ }
+setFormData(prev => ({
+    ...prev,
+accountNumber: value}));
+  
+  // Clear error for this field when user starts typing
+  if (formErrors.accountNumber) {
+   setFormErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors.accountNumber;
+     returnnewErrors;
+    });
+  }
+  
+  // Real-timevalidation for accountnumber
+ validateBankFieldOnInput('accountNumber', value);
+};
+
+const handleBankNameChange = (e) => {
+ let { value } = e.target;
+  
+  setFormData(prev => ({
+    ...prev,
+    bankName: value}));
+  
+  // Clear error for this field when user starts typingif (formErrors.bankName) {
+   setFormErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors.bankName;
+     returnnewErrors;
+    });
+
+  
+  // Real-time validation for bankname
+ validateBankFieldOnInput('bankName', value);
+};
+
+const validateBankFieldOnInput =(fieldName, value) => {
+ leterrorMessage= '';
+  
+switch(fieldName) {
+   case'bankName':
+     if (value&&value.trim().length < 2) {
+       errorMessage= 'Bankname must be at least 2 characters long';
+     }
+break;
+      
+case 'routingNumber':
+     if (value && value.length> 0 && value.length < 9) {
+       errorMessage= 'Routingnumber must be 9 digits';
+     }else if(value&& value.length === 9 && !/^\d{9}$/.test(value)) {
+       errorMessage= 'Routingnumber must containonly digits';
+     }
+break;
+      
+    case 'accountNumber':
+     if (value && value.length > 0 && (value.length < 6 || value.length > 17)) {
+       errorMessage= 'Accountnumber must be between 6 and 17 digits';
+     } else if (value && !/^\d+$/.test(value)) {
+       errorMessage = 'Accountnumber must containonly digits';
+     }
+      break;
+      
+    default:
+break;
+ }
+// Onlyupdate error if there's a new error or clearing an existing one
+ if(errorMessage|| formErrors[fieldName]) {
+   setFormErrors(prev => {
+      const newErrors = { ...prev };
+      if(errorMessage){
+       newErrors[fieldName] = errorMessage;
+     }else {
+        delete newErrors[fieldName];
+     }
+returnnewErrors;
+    });
+  }
 };
