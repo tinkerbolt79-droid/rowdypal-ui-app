@@ -98,14 +98,14 @@ function App() {
               }
             />
             {process.env.NODE_ENV === 'development' && (
-            <Route
-              path="/debug"
-              element={
-                <ProtectedRoute>
-                  <DebugEvents />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/debug"
+                element={
+                  <ProtectedRoute>
+                    <DebugEvents />
+                  </ProtectedRoute>
+                }
+              />
             )}
             <Route path="/" element={<Navigate to="/events" />} />
           </Routes>
