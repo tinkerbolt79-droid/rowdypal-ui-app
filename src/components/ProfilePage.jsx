@@ -36,7 +36,7 @@ export default function ProfilePage() {
         // Provide more specific error information
         if (err.code === 'permission-denied') {
           // This might be because the user doesn't have a profile yet, or security rules are not set up correctly
-          console.log('Permission denied when fetching profile. This might be expected for new users or due to misconfigured security rules.');
+          console.log('Permission denied when fetching profile.');
           // We won't show an error to the user here since it's expected for new users
           // The form fields will remain empty and the user can fill them in
         } else if (err.code === 'not-found') {
@@ -90,7 +90,7 @@ export default function ProfilePage() {
       console.error('Profile update error:', err);
       // Provide more specific error information
       if (err.code === 'permission-denied') {
-        setError('Permission denied: You do not have permission to update profile. This is likely due to Firestore security rules that need to be configured by the administrator.');
+        setError('Permission denied: You do not have permission to update profile.');
       } else if (err.code === 'not-found') {
         setError('Profile not found. Please try again or contact support.');
       } else {

@@ -61,7 +61,7 @@ export default function Events() {
           setEvents(eventsData);
         } catch (fallbackErr) {
           if (fallbackErr.code === 'permission-denied') {
-            setError('Unable to load events. Please check that Firestore rules have been properly configured to allow access to the events collection. Make sure you have deployed or manually updated the rules to allow read access for authenticated users.');
+            setError('Permission denied when loading events.');
           } else {
             setError('Failed to fetch events. Please try again.');
           }
@@ -138,7 +138,7 @@ export default function Events() {
       setEditingEvent(null);
     } catch (err) {
       if (err.code === 'permission-denied') {
-        setError('Unable to save event. Please check that Firestore rules have been properly configured to allow creating events. Make sure you have deployed or manually updated the rules to allow create access for authenticated users.');
+        setError('Permission denied to save event.');
       } else {
         setError('Failed to save event. Please try again.');
       }
@@ -185,7 +185,7 @@ export default function Events() {
         setEvents(prev => prev.filter(event => event.id !== eventId));
       } catch (err) {
         if (err.code === 'permission-denied') {
-          setError('Unable to delete event. Please check that Firestore rules have been properly configured to allow deleting events. Make sure you have deployed or manually updated the rules to allow delete access for authenticated users.');
+          setError('Permission denied to delete event.');
         } else {
           setError('Failed to delete event. Please try again.');
         }
