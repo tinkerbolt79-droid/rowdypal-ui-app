@@ -4,11 +4,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export default function Dashboard() {
+export default function Events() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   
-  console.log('Dashboard render - currentUser:', currentUser);
+  // Removed console.log for security reasons
   
   const [events, setEvents] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -26,13 +26,13 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchEvents = async () => {
       if (!currentUser) {
-        console.log('No current user, skipping fetch');
+        // No current user, skipping fetch
         return;
       }
       
       try {
         setFetching(true);
-        console.log('Fetching events for user:', currentUser.uid);
+        // Fetching events for user
         
         // First try to fetch with ordering
         const q = query(
@@ -45,10 +45,8 @@ export default function Dashboard() {
           id: doc.id,
           ...doc.data()
         }));
-        console.log('Fetched events with ordering:', eventsData);
         setEvents(eventsData);
       } catch (err) {
-        console.error('Error fetching events with ordering:', err);
         // If ordering fails, try without ordering
         try {
           const q = query(
@@ -60,10 +58,8 @@ export default function Dashboard() {
             id: doc.id,
             ...doc.data()
           }));
-          console.log('Fetched events without ordering:', eventsData);
           setEvents(eventsData);
         } catch (fallbackErr) {
-          console.error('Error fetching events without ordering:', fallbackErr);
           if (fallbackErr.code === 'permission-denied') {
             setError('Unable to load events. Please check that Firestore rules have been properly configured to allow access to the events collection. Make sure you have deployed or manually updated the rules to allow read access for authenticated users.');
           } else {
@@ -141,7 +137,6 @@ export default function Dashboard() {
       setShowAddForm(false);
       setEditingEvent(null);
     } catch (err) {
-      console.error('Error saving event:', err);
       if (err.code === 'permission-denied') {
         setError('Unable to save event. Please check that Firestore rules have been properly configured to allow creating events. Make sure you have deployed or manually updated the rules to allow create access for authenticated users.');
       } else {
@@ -169,7 +164,6 @@ export default function Dashboard() {
         )
       );
     } catch (err) {
-      console.error('Error updating subscription:', err);
       setError('Failed to update subscription. Please try again.');
     }
   };
@@ -190,7 +184,6 @@ export default function Dashboard() {
         await deleteDoc(doc(db, 'events', eventId));
         setEvents(prev => prev.filter(event => event.id !== eventId));
       } catch (err) {
-        console.error('Error deleting event:', err);
         if (err.code === 'permission-denied') {
           setError('Unable to delete event. Please check that Firestore rules have been properly configured to allow deleting events. Make sure you have deployed or manually updated the rules to allow delete access for authenticated users.');
         } else {
@@ -336,7 +329,6 @@ export default function Dashboard() {
                   <td>{event.date ? new Date(event.date).toLocaleDateString() : 'No date'}</td>
                   <td>
                     <div className="subscription-display">
-{/*                       <span className="current-subscription">{event.subscription || 'None'}</span> */}
                       <div className="subscription-buttons">
                         <button 
                           className={`subscription-btn small ${event.subscription === 'Yearly' ? 'selected' : ''}`}
