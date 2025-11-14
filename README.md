@@ -4,7 +4,7 @@ A React-based web application built with Vite.
 
 ## Prerequisites
 
-- Node.js (version 14 or higher)
+- Node.js (version 20 or higher)
 - npm or yarn package manager
 
 ## Getting Started
