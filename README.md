@@ -88,7 +88,7 @@ Note: You need to have the Firebase CLI installed and be logged in to deploy.
 ### Application Features
 
 - User authentication (login/logout)
-- Dashboard view
+- Events view
 - Profile management
 - Debug events panel
 
