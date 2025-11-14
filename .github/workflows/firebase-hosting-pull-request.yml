@@ -23,11 +23,13 @@ jobs:
       
       # Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm ci || npm install
       
       # Build the project
       - name: Build
         run: npm run build
+        env:
+          CI: false
       
       # Deploy to Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0

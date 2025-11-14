@@ -58,6 +58,27 @@ The application will start and you should see output similar to:
 2. Navigate to the local address shown in the terminal output (typically `http://localhost:5173/`)
 3. The application should load and display the login page
 
+### Firebase Hosting
+
+The application is hosted on Firebase Hosting and is available at the following domains:
+
+- https://rowdypal-8db00.web.app
+- https://rowdypal-8db00.firebaseapp.com
+
+To deploy the application to Firebase Hosting:
+
+1. Build the application:
+   ```
+   npm run build
+   ```
+
+2. Deploy to Firebase Hosting:
+   ```
+   firebase deploy --only hosting
+   ```
+
+Note: You need to have the Firebase CLI installed and be logged in to deploy.
+
 ### Available Scripts
 
 - `npm run dev` - Starts the development server
