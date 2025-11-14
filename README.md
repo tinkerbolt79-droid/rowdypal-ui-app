@@ -13,7 +13,7 @@ A React-based web application built with Vite.
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/tinkerbolt79-droid/rowdypal-ui-app.git
    ```
 
 2. Navigate to the project directory:
