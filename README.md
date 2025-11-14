@@ -89,6 +89,7 @@ Note: You need to have the Firebase CLI installed and be logged in to deploy.
 
 - User authentication (login/logout)
 - Events view
+- Payments management (credit cards, bank accounts)
 - Profile management
 - Debug events panel
 

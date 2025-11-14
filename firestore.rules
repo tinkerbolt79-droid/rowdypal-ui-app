@@ -13,6 +13,12 @@ service cloud.firestore {
       allow create: if request.auth != null;
     }
     
+    // Allow users to read, create, update and delete their own payment methods
+    match /paymentMethods/{paymentMethodId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+    
     // Allow users to read public data if any
     match /{document=**} {
       allow read: if false; // Default deny for all other documents

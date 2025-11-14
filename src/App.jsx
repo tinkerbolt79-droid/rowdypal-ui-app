@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import LoginPage from './components/LoginPage.jsx';
 import ProfilePage from './components/ProfilePage.jsx';
 import Events from './components/Events.jsx';
+import Payments from './components/Payments.jsx';
 import DebugEvents from './components/DebugEvents.jsx';
 import './App.css';
 
@@ -43,6 +44,12 @@ function Navigation() {
               Events
             </Link>
             <Link 
+              to="/payments" 
+              className={`dropdown-item ${location.pathname === '/payments' ? 'active' : ''}`}
+            >
+              Payments
+            </Link>
+            <Link 
               to="/profile" 
               className={`dropdown-item ${location.pathname === '/profile' ? 'active' : ''}`}
             >
@@ -71,6 +78,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Events />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payments"
+              element={
+                <ProtectedRoute>
+                  <Payments />
                 </ProtectedRoute>
               }
             />

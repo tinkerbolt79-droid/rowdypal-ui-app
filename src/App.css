@@ -1,4 +1,4 @@
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -84,7 +84,7 @@ body {
   text-decoration: none;
   color: #333;
   text-align: left;
-  border: none;
+border: none;
   background: none;
   cursor: pointer;
   font-size: 1rem;
@@ -97,7 +97,7 @@ body {
 .dropdown-item.active {
   background: #e8f0fe;
   color: #4285f4;
-  font-weight: 600;
+font-weight: 600;
 }
 
 /* Subscription Styles */
@@ -135,7 +135,7 @@ body {
 
 .subscription-display {
   display: flex;
-  flex-direction: column;
+ flex-direction: column;
   gap: 5px;
 }
 
@@ -186,7 +186,7 @@ body {
 }
 
 .form-group input {
-  width: 100%;
+width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -196,7 +196,7 @@ body {
 .btn-primary {
   width: 100%;
   padding: 12px;
-  background: #4285f4;
+  background:#4285f4;
   color: white;
   border: none;
   border-radius: 5px;
@@ -220,7 +220,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
-  cursor: pointer;
+ cursor: pointer;
   margin-bottom: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -290,7 +290,7 @@ body {
 .avatar {
   width: 70px;
   height: 70px;
-  border-radius: 50%;
+ border-radius: 50%;
   background: #4285f4;
   display: flex;
   align-items: center;
@@ -317,7 +317,7 @@ body {
 
 .form-row {
   display: flex;
-  gap: 15px;
+gap: 15px;
   margin-bottom: 20px;
 }
 
@@ -340,6 +340,19 @@ body {
   font-size: 1rem;
 }
 
+.error-text {
+  color: #c62828;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.helper-text {
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+
 .btn-secondary {
   width: 100%;
   padding: 12px;
@@ -354,7 +367,7 @@ body {
 }
 
 .error {
-  background: #ffebee;
+ background: #ffebee;
   color: #c62828;
   padding: 12px;
   border-radius: 5px;
@@ -364,7 +377,7 @@ body {
 
 .error-details {
   margin-top: 10px;
-  font-size: 0.9rem;
+  font-size:0.9rem;
 }
 
 .error-details a {
@@ -400,7 +413,7 @@ body {
 }
 
 .dashboard-header h2 {
-  color: #333;
+ color: #333;
 }
 
 .event-form-container {
@@ -412,7 +425,7 @@ body {
 
 .event-form-container h3 {
   margin-bottom: 20px;
-  color: #333;
+ color: #333;
 }
 
 .form-actions {
@@ -425,7 +438,7 @@ body {
 .btn-edit, .btn-delete {
   padding: 8px 16px;
   border: none;
-  border-radius: 5px;
+ border-radius: 5px;
   cursor: pointer;
   font-size: 0.9rem;
   margin-right: 5px;
@@ -438,7 +451,7 @@ body {
 
 .btn-delete {
   background: #ea4335;
-  color: white;
+ color: white;
 }
 
 .events-list {
@@ -463,6 +476,184 @@ body {
 }
 
 .no-events {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 40px;
+}
+
+/*PaymentStyles */
+.payments-container {
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.payments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.payments-header h2 {
+  color: #333;
+}
+
+.payment-form-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.payment-form-container h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.payment-type-selector, .account-type-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.payment-type-btn,.account-type-btn {
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.payment-type-btn:hover, .account-type-btn:hover {
+  border-color: #4285f4;
+  background: #f8f9fa;
+}
+
+.payment-type-btn.selected, .account-type-btn.selected {
+  background: #4285f4;
+  color: white;
+  border-color: #4285f4;
+}
+
+.payment-methods-list {
+  margin-top: 30px;
+}
+
+.payment-methods-list h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.payment-method-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.payment-method-card.primary {
+  border: 2px solid #4285f4;
+  background: #e8f0fe;
+}
+
+.card-header {
+  display: flex;
+ justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.card-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.primary-badge {
+  background: #4285f4;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.btn-primary-small {
+  padding: 5px 10px;
+  background: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btn-primary-small:hover:not(:disabled) {
+  background: #3367d6;
+}
+
+.btn-primary-small:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.card-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.btn-delete-small{
+  background: #ea4335;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  font-size: 16px;
+  padding: 0;
+}
+
+.btn-delete-small:hover {
+  background: #d32f2f;
+}
+
+/* Removed disabled styles since we now hide the delete button for primary payments */
+
+.card-details p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.card-details strong {
+  display:inline-block;
+  width: 120px;
+}
+
+.no-payments {
   text-align: center;
   color: #666;
   font-style: italic;
@@ -498,7 +689,7 @@ body {
     padding: 8px;
   }
   
-  .subscription-options {
+ .subscription-options {
     flex-direction: column;
   }
   
