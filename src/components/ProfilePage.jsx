@@ -111,7 +111,6 @@ export default function ProfilePage() {
           <div>
             <h3>{currentUser?.displayName || 'User'}</h3>
             <p>{currentUser?.email}</p>
-            <p><Link to="/events">Go to Events</Link></p>
           </div>
         </div>
 

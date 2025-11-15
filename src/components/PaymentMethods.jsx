@@ -630,7 +630,7 @@ export default function PaymentMethods() {
     return (
       <div className="payments-container">
         <div className="payments-header">
-          <h2>Payment Methods</h2>
+          <h2>Payment Types</h2>
         </div>
         <p>Loading payment methods...</p>
         {error && <div className="error">{error}</div>}
@@ -641,9 +641,9 @@ export default function PaymentMethods() {
   return (
     <div className="payments-container">
       <div className="payments-header">
-        <h2>Payment Methods</h2>
+        <h2></h2>
         <button className="btn-primary" onClick={handleAddNew}>
-          Add Payment Method
+          Add Payment
         </button>
       </div>
 
@@ -825,7 +825,8 @@ export default function PaymentMethods() {
           <p className="no-payments">No payment methods found. Add your first payment method!</p>
         ) : (
           <>
-            <h3>Saved Payment Methods</h3>
+            <h3>Saved Payment Types</h3>
+            <p></p>
             <div className="payment-methods-grid">
               {paymentMethods.map(method => (
                 <div key={method.id} className={`payment-method-card ${method.isPrimary ? 'primary' : ''}`}>
@@ -842,7 +843,7 @@ export default function PaymentMethods() {
                             onClick={() => setAsPrimary(method.id)}
                             disabled={method.isPrimary}
                           >
-                            {method.isPrimary ? 'Primary' : 'Set as Primary'}
+                            {method.isPrimary ? 'Primary' : 'Set Primary'}
                           </button>
                           {!method.isPrimary && (
                             <button 
@@ -874,7 +875,7 @@ export default function PaymentMethods() {
                             onClick={() => setAsPrimary(method.id)}
                             disabled={method.isPrimary}
                           >
-                            {method.isPrimary ? 'Primary' : 'Set as Primary'}
+                            {method.isPrimary ? 'Primary' : 'Set Primary'}
                           </button>
                           {!method.isPrimary && (
                             <button 

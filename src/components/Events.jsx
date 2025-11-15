@@ -236,7 +236,7 @@ export default function Events() {
     return(
       <div className="dashboard-container">
         <div className="dashboard-header">
-          <h2>My Events</h2>
+          <h2>Events</h2>
         </div>
         <p>Loading events...</p>
         {error && <div className="error">{error}</div>}
@@ -247,7 +247,7 @@ export default function Events() {
   return(
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h2>My Events</h2>
+        <h2>Events</h2>
         <button className="btn-primary" onClick={handleAddNew}>
           Add Event
         </button>
@@ -370,7 +370,8 @@ export default function Events() {
             <thead>
               <tr>
                 <th>Event Name</th>
-                <th>EventDate</th>
+                <th>Event Date</th>
+                <th>Preferred Gift</th>
                 <th>Subscription</th>
                 <th>Actions</th>
               </tr>
@@ -387,6 +388,7 @@ export default function Events() {
                     </button>
                   </td>
                   <td>{event.date ?new Date(event.date).toLocaleDateString() : 'No date'}</td>
+                  <td>{event.giftOption}</td>
                   <td>
                     <div className="subscription-display">
                       <div className="subscription-buttons">

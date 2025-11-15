@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './components/LoginPage';
 import Events from './components/Events';
@@ -11,6 +11,7 @@ import './global.css';
 
 function App() {
   const { currentUser, logout } = useAuth();
+  const location = useLocation(); // Add this to track current location
   
   // Protected route component
   const ProtectedRoute = ({ children }) => {
@@ -41,14 +42,14 @@ function App() {
       {currentUser && (
         <nav className="navbar">
           <div className="nav-brand">
-            <Link to="/events">RowdyPal</Link>
+            <Link to="/events">Dear Friend</Link>
           </div>
           <div className="nav-links">
               <div className="user-menu">
                 <span className="user-icon">👤</span>
                 <div className="user-dropdown">
                     <Link to="/events" className={`dropdown-item ${location.pathname === '/events' ? 'active' : ''}`}>Events</Link>
-                    <Link to="/payments" className={`dropdown-item ${location.pathname === '/payments' ? 'active' : ''}`}>PaymentMethods</Link>
+                    <Link to="/payments" className={`dropdown-item ${location.pathname === '/payments' ? 'active' : ''}`}>Payment Types</Link>
                     <Link to="/profile" className={`dropdown-item ${location.pathname === '/profile' ? 'active' : ''}`}>Profile</Link>
                     <button onClick={handleLogout} className="dropdown-item logout-btn">Logout</button>
                 </div>

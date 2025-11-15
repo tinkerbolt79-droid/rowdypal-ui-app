@@ -382,6 +382,11 @@ body {
 .gifts-table th {
     background: #f1f3f4;
     font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
 }
 
 .events-table tr:nth-child(even),
@@ -476,6 +481,14 @@ body {
     border-radius: 5px;
     margin-bottom: 15px;
     text-align: center;
+}
+
+h2 {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 0;
 }
 
 .helper-text {
