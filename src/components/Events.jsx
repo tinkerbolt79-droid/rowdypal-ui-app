@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import '../Event.css';
+import '../global.css';
 
 export default function Events() {
   const { currentUser } = useAuth();
@@ -248,7 +248,7 @@ export default function Events() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2>My Events</h2>
-        <button className=".form-actionsbutton" onClick={handleAddNew}>
+        <button className="btn-primary" onClick={handleAddNew}>
           Add Event
         </button>
       </div>
@@ -304,7 +304,7 @@ export default function Events() {
                 </button>
                 <button
                   type="button"
-                  className={`subscription-btn${formData.subscription === 'None' ? 'selected' : ''}`}
+                  className={`subscription-btn ${formData.subscription === 'None' ? 'selected' : ''}`}
                   onClick={() => setFormData({...formData, subscription: 'None'})}
                 >
                   None
@@ -372,7 +372,6 @@ export default function Events() {
                 <th>Event Name</th>
                 <th>EventDate</th>
                 <th>Subscription</th>
-                {/*                 <th>Gift Option</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -391,19 +390,19 @@ export default function Events() {
                   <td>
                     <div className="subscription-display">
                       <div className="subscription-buttons">
-                        <button className={`subscription-btn${event.subscription === 'Yearly' ? 'selected' : ''}`}
+                        <button className={`subscription-btn ${event.subscription === 'Yearly' ? 'selected' : ''}`}
                           onClick={() => updateSubscription(event.id,'Yearly')}
                         >
                           Yearly
                         </button>
                         <button
-                          className={`subscription-btn${event.subscription === 'Monthly' ? 'selected' : ''}`}
+                          className={`subscription-btn ${event.subscription === 'Monthly' ? 'selected' : ''}`}
                           onClick={() => updateSubscription(event.id, 'Monthly')}
                         >
                           Monthly
                         </button>
                         <button
-                          className={`subscription-btn${event.subscription === 'None' ? 'selected' : ''}`}
+                          className={`subscription-btn ${event.subscription === 'None' ? 'selected' : ''}`}
                           onClick={() => updateSubscription(event.id, 'None')}
                         >
                           None
@@ -411,36 +410,12 @@ export default function Events() {
                       </div>
                     </div>
                   </td>
-                  {/*                   <td> */}
-                  {/*                     <div className="gift-options-display"> */}
-                  {/*                       <div className="gift-options-buttons"> */}
-                  {/*                         <button  */}
-                  {/*                           className={`gift-option-btn ${event.giftOption === 'Flowers' ? 'selected' : ''}`} */}
-                  {/*                          onClick={() => updateGiftOption(event.id, 'Flowers')} */}
-                  {/*                         > */}
-                  {/*                           Flowers */}
-                  {/*                         </button> */}
-                  {/*                         <button  */}
-                  {/*                          className={`gift-option-btn ${event.giftOption === 'Movie Tickets' ? 'selected' : ''}`} */}
-                  {/*                           onClick={() => updateGiftOption(event.id, 'Movie Tickets')} */}
-                  {/*                         > */}
-                  {/*                           Movie Tickets */}
-                  {/*                         </button> */}
-                  {/*                         <button  */}
-                  {/*                           className={`gift-option-btn ${event.giftOption === 'Chocolates' ? 'selected' : ''}`} */}
-                  {/*                           onClick={() => updateGiftOption(event.id, 'Chocolates')} */}
-                  {/*                         > */}
-                  {/*                           Chocolates */}
-                  {/*                         </button> */}
-                  {/*                      </div> */}
-                  {/*                     </div> */}
-                  {/*                   </td> */}
                   <td>
                     <button
                       className="btn-delete"
                       onClick={() => handleDelete(event.id)}
                     >
-Delete
+                      Delete
                     </button>
                   </td>
                 </tr>

@@ -1,127 +1,80 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext.jsx';
-import LoginPage from './components/LoginPage.jsx';
-import ProfilePage from './components/ProfilePage.jsx';
-import Events from './components/Events.jsx';
-import PaymentMethods from './components/PaymentMethods.jsx';
-import GiftOptions from './components/GiftOptions.jsx';
-import DebugEvents from './components/DebugEvents.jsx';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import LoginPage from './components/LoginPage';
+import Events from './components/Events';
+import GiftOptions from './components/GiftOptions';
+import PaymentMethods from './components/PaymentMethods';
+import ProfilePage from './components/ProfilePage';
+import DebugEvents from './components/DebugEvents';
+import './global.css';
 
-function ProtectedRoute({ children }) {
+function App() {
   const { currentUser } = useAuth();
-
-  return currentUser ?children : <Navigate to="/login" />;
-}
-
-function Navigation() {
-  const { currentUser, logout } = useAuth();
-  const location = useLocation();
   
-  if (!currentUser) return null;
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Failed to logout:', error);
+  // Protected route component
+  const ProtectedRoute = ({ children }) => {
+    if (!currentUser) {
+      return <Navigate to="/login" />;
     }
+    return children;
+  };
+  
+  // Public route component (redirects logged in users)
+  const PublicRoute = ({ children }) => {
+    if (currentUser) {
+      return <Navigate to="/events" />;
+    }
+    return children;
   };
 
   return (
-    <nav className="navbar">
-      <div className="nav-brand">
-        <Link to="/events">RowdyPal</Link>
-      </div>
-      <div className="nav-links">
-        <div className="user-menu">
-          <span className="user-icon">👤</span>
-          <div className="user-dropdown">
-            <Link 
-              to="/events" 
-              className={`dropdown-item ${location.pathname === '/events' ? 'active' : ''}`}
-            >
-              Events
-            </Link>
-            <Link 
-              to="/payments" 
-              className={`dropdown-item ${location.pathname === '/payments' ? 'active' : ''}`}
-            >
-              PaymentMethods
-            </Link>
-            <Link 
-              to="/profile" 
-              className={`dropdown-item ${location.pathname === '/profile' ? 'active' : ''}`}
-            >
-              Profile
-            </Link>
-            <button onClick={handleLogout} className="dropdown-item logout-btn">
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <div className="App">
+      <Routes>
+        <Route path="/login" element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        } />
+        <Route path="/events" element={
+          <ProtectedRoute>
+            <Events />
+          </ProtectedRoute>
+        } />
+        <Route path="/events/:eventId/gifts" element={
+          <ProtectedRoute>
+            <GiftOptions />
+          </ProtectedRoute>
+        } />
+        <Route path="/payments" element={
+          <ProtectedRoute>
+            <PaymentMethods />
+          </ProtectedRoute>
+        } />
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/debug" element={
+          <ProtectedRoute>
+            <DebugEvents />
+          </ProtectedRoute>
+        } />
+        <Route path="/" element={<Navigate to="/events" />} />
+      </Routes>
+    </div>
   );
 }
 
-function App() {
+function AppWrapper() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
-          <Navigation />
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/events"
-              element={
-                <ProtectedRoute>
-                  <Events />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/payments"
-              element={
-                <ProtectedRoute>
-                  <PaymentMethods />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            {process.env.NODE_ENV === 'development' && (
-              <Route
-                path="/debug"
-                element={
-                  <ProtectedRoute>
-                    <DebugEvents />
-                  </ProtectedRoute>
-                }
-              />
-            )}
-            <Route
-              path="/events/:eventId/gifts"
-              element={
-                <ProtectedRoute>
-                  <GiftOptions />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/" element={<Navigate to="/events" />} />
-          </Routes>
-        </div>
+        <App />
       </Router>
     </AuthProvider>
   );
 }
 
-export default App;
+export default AppWrapper;

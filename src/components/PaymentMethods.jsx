@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import '../global.css';
 
 export default function PaymentMethods() {
   const { currentUser } = useAuth();
@@ -639,23 +640,6 @@ export default function PaymentMethods() {
 
   return (
     <div className="payments-container">
-      <style>
-        {`
-          .error-input {
-            border: 2px solid #e74c3c !important;
-          }
-          .error-text {
-            color: #e74c3c;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-          }
-          .helper-text {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 0.25rem;
-          }
-        `}
-      </style>
       <div className="payments-header">
         <h2>Payment Methods</h2>
         <button className="btn-primary" onClick={handleAddNew}>
