@@ -89,7 +89,7 @@ export default function Events() {
     setError('');
     
     if (!formData.name || !formData.date) {
-      setError('Pleasefillinall fields');
+      setError('Please fill in all fields');
       return;
     }
     
@@ -205,13 +205,13 @@ export default function Events() {
   };
 
   const handleDelete= async (eventId)=> {
-    if (window.confirm('Areyou sure you want to delete this event?')) {
+    if (window.confirm('Are you sure you want to delete this event?')) {
       try {
         await deleteDoc(doc(db, 'events', eventId));
         setEvents(prev => prev.filter(event => event.id !== eventId));
       } catch (err) {
         if(err.code === 'permission-denied') {
-          setError('Permission denied to deleteevent.');
+          setError('Permission denied to delete event.');
         } else {
           setError('Failed to delete event. Please try again.');
         }
@@ -362,7 +362,7 @@ export default function Events() {
 
       <div className="events-list">
         {fetching ? (
-          <p>Loadingevents...</p>
+          <p>Loading events...</p>
         ) : events.length === 0 ? (
           <p className="no-events">No events found.Add your first event!</p>
         ) : (
