@@ -5,13 +5,14 @@ import LoginPage from './components/LoginPage.jsx';
 import ProfilePage from './components/ProfilePage.jsx';
 import Events from './components/Events.jsx';
 import PaymentMethods from './components/PaymentMethods.jsx';
+import GiftOptions from './components/GiftOptions.jsx';
 import DebugEvents from './components/DebugEvents.jsx';
 import './App.css';
 
 function ProtectedRoute({ children }) {
   const { currentUser } = useAuth();
 
-  return currentUser ? children : <Navigate to="/login" />;
+  return currentUser ?children : <Navigate to="/login" />;
 }
 
 function Navigation() {
@@ -107,6 +108,14 @@ function App() {
                 }
               />
             )}
+            <Route
+              path="/events/:eventId/gifts"
+              element={
+                <ProtectedRoute>
+                  <GiftOptions />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/" element={<Navigate to="/events" />} />
           </Routes>
         </div>

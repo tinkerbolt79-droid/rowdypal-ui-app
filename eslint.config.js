@@ -5,6 +5,7 @@ export default [
   js.configs.recommended,
   {
     files: ['**/*.js', '**/*.jsx'],
+    ignores: ['node_modules/*', 'dist/*', 'build/*', '.git', 'public/*', 'coverage', '.env'],
     plugins: {
       react
     },

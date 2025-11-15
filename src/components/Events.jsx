@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
+import '../Event.css';
 
 export default function Events() {
   const { currentUser } = useAuth();
@@ -16,7 +17,8 @@ export default function Events() {
   const [formData, setFormData] = useState({
     name: '',
     date: '',
-    subscription: 'None' // Add subscription field with default value
+    subscription: 'None',
+    giftOption: 'Flowers'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -60,7 +62,7 @@ export default function Events() {
           }));
           setEvents(eventsData);
         } catch (fallbackErr) {
-          if (fallbackErr.code === 'permission-denied') {
+          if (fallbackErr.code ==='permission-denied') {
             setError('Permission denied when loading events.');
           } else {
             setError('Failed to fetch events. Please try again.');
@@ -74,7 +76,7 @@ export default function Events() {
     fetchEvents();
   }, [currentUser]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e)=>{
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -87,7 +89,7 @@ export default function Events() {
     setError('');
     
     if (!formData.name || !formData.date) {
-      setError('Please fill in all fields');
+      setError('Pleasefillinall fields');
       return;
     }
     
@@ -99,41 +101,43 @@ export default function Events() {
         const eventRef = doc(db, 'events', editingEvent.id);
         await updateDoc(eventRef, {
           name: formData.name,
-          date: formData.date,
-          subscription: formData.subscription // Include subscription in update
+          date:formData.date,
+          subscription: formData.subscription, // Include subscription in update
+          giftOption: formData.giftOption // Include giftOption in update
         });
         
         setEvents(prev => 
           prev.map(event => 
             event.id === editingEvent.id 
-              ? { ...event, name: formData.name, date: formData.date, subscription: formData.subscription } 
+              ? { ...event, name: formData.name, date: formData.date, subscription: formData.subscription, giftOption: formData.giftOption } 
               : event
           )
         );
-      } else {
+      }else {
         // Add new event
         const docRef = await addDoc(collection(db, 'events'), {
           name: formData.name,
           date: formData.date,
           subscription: formData.subscription, // Include subscription in creation
+          giftOption: formData.giftOption, // Include giftOption in creation
           userId: currentUser.uid,
           createdAt: new Date()
         });
-        
-        setEvents(prev => [
+        setEvents(prev=> [
           ...prev,
           { 
             id: docRef.id, 
             name: formData.name, 
             date: formData.date,
             subscription: formData.subscription,
+            giftOption: formData.giftOption,
             userId: currentUser.uid
           }
         ]);
       }
       
       // Reset form
-      setFormData({ name: '', date: '', subscription: 'None' });
+      setFormData({ name:'', date: '',subscription:'None', giftOption: 'Flowers'});
       setShowAddForm(false);
       setEditingEvent(null);
     } catch (err) {
@@ -142,7 +146,7 @@ export default function Events() {
       } else {
         setError('Failed to save event. Please try again.');
       }
-    } finally {
+    }finally{
       setLoading(false);
     }
   };
@@ -155,7 +159,7 @@ export default function Events() {
         subscription: subscriptionValue
       });
       
-      // Update local state
+      //Update local state
       setEvents(prev => 
         prev.map(event => 
           event.id === eventId 
@@ -168,24 +172,46 @@ export default function Events() {
     }
   };
 
+  //Function to update gift option for an event
+  const updateGiftOption = async (eventId, giftOptionValue) => {
+    try {
+      const eventRef = doc(db, 'events', eventId);
+      await updateDoc(eventRef, {
+        giftOption: giftOptionValue
+      });
+      
+      // Update local state
+      setEvents(prev =>
+        prev.map(event => 
+          event.id === eventId 
+            ? { ...event, giftOption: giftOptionValue } 
+            : event
+        )
+      );
+    } catch (err) {
+      setError('Failed to update gift option. Please try again.');
+    }
+  };
+
   const handleEdit = (event) => {
     setEditingEvent(event);
     setFormData({
       name: event.name,
       date: event.date,
-      subscription: event.subscription || 'None' // Include subscription in form data
+      subscription: event.subscription || 'None', // Include subscription in form data
+      giftOption: event.giftOption || 'Flowers' // Include giftOption in form data
     });
     setShowAddForm(true);
   };
 
-  const handleDelete = async (eventId) => {
-    if (window.confirm('Are you sure you want to delete this event?')) {
+  const handleDelete= async (eventId)=> {
+    if (window.confirm('Areyou sure you want to delete this event?')) {
       try {
         await deleteDoc(doc(db, 'events', eventId));
         setEvents(prev => prev.filter(event => event.id !== eventId));
       } catch (err) {
-        if (err.code === 'permission-denied') {
-          setError('Permission denied to delete event.');
+        if(err.code === 'permission-denied') {
+          setError('Permission denied to deleteevent.');
         } else {
           setError('Failed to delete event. Please try again.');
         }
@@ -195,19 +221,19 @@ export default function Events() {
 
   const handleAddNew = () => {
     setEditingEvent(null);
-    setFormData({ name: '', date: '', subscription: 'None' });
+    setFormData({ name: '',date:'', subscription: 'None', giftOption: 'Flowers'});
     setShowAddForm(true);
   };
 
   const cancelForm = () => {
     setShowAddForm(false);
     setEditingEvent(null);
-    setFormData({ name: '', date: '', subscription: 'None' });
+    setFormData({ name: '', date: '', subscription: 'None', giftOption: 'Flowers' });
     setError('');
   };
 
   if (fetching) {
-    return (
+    return(
       <div className="dashboard-container">
         <div className="dashboard-header">
           <h2>My Events</h2>
@@ -218,11 +244,11 @@ export default function Events() {
     );
   }
 
-  return (
+  return(
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2>My Events</h2>
-        <button className="btn-primary" onClick={handleAddNew}>
+        <button className=".form-actionsbutton" onClick={handleAddNew}>
           Add Event
         </button>
       </div>
@@ -278,10 +304,37 @@ export default function Events() {
                 </button>
                 <button
                   type="button"
-                  className={`subscription-btn ${formData.subscription === 'None' ? 'selected' : ''}`}
+                  className={`subscription-btn${formData.subscription === 'None' ? 'selected' : ''}`}
                   onClick={() => setFormData({...formData, subscription: 'None'})}
                 >
                   None
+                </button>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>Gift Option</label>
+              <div className="subscription-options">
+                <button
+                  type="button"
+                  className={`subscription-btn ${formData.giftOption === 'Flowers' ? 'selected' : ''}`}
+                  onClick={() => setFormData({...formData, giftOption: 'Flowers'})}
+                >
+                  Flowers
+                </button>
+                <button
+                  type="button"
+                  className={`subscription-btn ${formData.giftOption === 'Movie Tickets' ? 'selected' : ''}`}
+                  onClick={() => setFormData({...formData, giftOption: 'Movie Tickets'})}
+                >
+                  Movie Tickets
+                </button>
+                <button
+                  type="button"
+                  className={`subscription-btn ${formData.giftOption === 'Chocolates' ? 'selected' : ''}`}
+                  onClick={() => setFormData({...formData, giftOption: 'Chocolates'})}
+                >
+                  Chocolates
                 </button>
               </div>
             </div>
@@ -309,41 +362,48 @@ export default function Events() {
 
       <div className="events-list">
         {fetching ? (
-          <p>Loading events...</p>
+          <p>Loadingevents...</p>
         ) : events.length === 0 ? (
-          <p className="no-events">No events found. Add your first event!</p>
+          <p className="no-events">No events found.Add your first event!</p>
         ) : (
           <table className="events-table">
             <thead>
               <tr>
                 <th>Event Name</th>
-                <th>Event Date</th>
+                <th>EventDate</th>
                 <th>Subscription</th>
+                {/*                 <th>Gift Option</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {events.map(event => (
                 <tr key={event.id}>
-                  <td>{event.name}</td>
-                  <td>{event.date ? new Date(event.date).toLocaleDateString() : 'No date'}</td>
+                  <td>
+                    <button 
+                      className="btn-link"
+                      onClick={() =>handleEdit(event)}
+                    >
+                      {event.name}
+                    </button>
+                  </td>
+                  <td>{event.date ?new Date(event.date).toLocaleDateString() : 'No date'}</td>
                   <td>
                     <div className="subscription-display">
                       <div className="subscription-buttons">
-                        <button 
-                          className={`subscription-btn small ${event.subscription === 'Yearly' ? 'selected' : ''}`}
-                          onClick={() => updateSubscription(event.id, 'Yearly')}
+                        <button className={`subscription-btn${event.subscription === 'Yearly' ? 'selected' : ''}`}
+                          onClick={() => updateSubscription(event.id,'Yearly')}
                         >
                           Yearly
                         </button>
-                        <button 
-                          className={`subscription-btn small ${event.subscription === 'Monthly' ? 'selected' : ''}`}
+                        <button
+                          className={`subscription-btn${event.subscription === 'Monthly' ? 'selected' : ''}`}
                           onClick={() => updateSubscription(event.id, 'Monthly')}
                         >
                           Monthly
                         </button>
-                        <button 
-                          className={`subscription-btn small ${event.subscription === 'None' ? 'selected' : ''}`}
+                        <button
+                          className={`subscription-btn${event.subscription === 'None' ? 'selected' : ''}`}
                           onClick={() => updateSubscription(event.id, 'None')}
                         >
                           None
@@ -351,18 +411,36 @@ export default function Events() {
                       </div>
                     </div>
                   </td>
+                  {/*                   <td> */}
+                  {/*                     <div className="gift-options-display"> */}
+                  {/*                       <div className="gift-options-buttons"> */}
+                  {/*                         <button  */}
+                  {/*                           className={`gift-option-btn ${event.giftOption === 'Flowers' ? 'selected' : ''}`} */}
+                  {/*                          onClick={() => updateGiftOption(event.id, 'Flowers')} */}
+                  {/*                         > */}
+                  {/*                           Flowers */}
+                  {/*                         </button> */}
+                  {/*                         <button  */}
+                  {/*                          className={`gift-option-btn ${event.giftOption === 'Movie Tickets' ? 'selected' : ''}`} */}
+                  {/*                           onClick={() => updateGiftOption(event.id, 'Movie Tickets')} */}
+                  {/*                         > */}
+                  {/*                           Movie Tickets */}
+                  {/*                         </button> */}
+                  {/*                         <button  */}
+                  {/*                           className={`gift-option-btn ${event.giftOption === 'Chocolates' ? 'selected' : ''}`} */}
+                  {/*                           onClick={() => updateGiftOption(event.id, 'Chocolates')} */}
+                  {/*                         > */}
+                  {/*                           Chocolates */}
+                  {/*                         </button> */}
+                  {/*                      </div> */}
+                  {/*                     </div> */}
+                  {/*                   </td> */}
                   <td>
-                    <button 
-                      className="btn-edit"
-                      onClick={() => handleEdit(event)}
-                    >
-                      Edit
-                    </button>
-                    <button 
+                    <button
                       className="btn-delete"
                       onClick={() => handleDelete(event.id)}
                     >
-                      Delete
+Delete
                     </button>
                   </td>
                 </tr>
