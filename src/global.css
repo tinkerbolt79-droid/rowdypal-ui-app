@@ -41,6 +41,26 @@ body {
 .nav-links {
     display: flex;
     align-items: center;
+    gap: 15px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background: #f1f3f4;
+}
+
+.nav-link.active {
+    background: #e8f0fe;
+    color: #4285f4;
+    font-weight: 600;
 }
 
 .user-menu {
@@ -671,5 +691,11 @@ body {
 
     .payment-methods-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
     }
 }

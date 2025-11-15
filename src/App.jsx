@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './components/LoginPage';
 import Events from './components/Events';
@@ -10,7 +10,7 @@ import DebugEvents from './components/DebugEvents';
 import './global.css';
 
 function App() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   
   // Protected route component
   const ProtectedRoute = ({ children }) => {
@@ -28,8 +28,35 @@ function App() {
     return children;
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
+
   return (
     <div className="App">
+      {currentUser && (
+        <nav className="navbar">
+          <div className="nav-brand">
+            <Link to="/events">RowdyPal</Link>
+          </div>
+          <div className="nav-links">
+              <div className="user-menu">
+                <span className="user-icon">👤</span>
+                <div className="user-dropdown">
+                    <Link to="/events" className={`dropdown-item ${location.pathname === '/events' ? 'active' : ''}`}>Events</Link>
+                    <Link to="/payments" className={`dropdown-item ${location.pathname === '/payments' ? 'active' : ''}`}>PaymentMethods</Link>
+                    <Link to="/profile" className={`dropdown-item ${location.pathname === '/profile' ? 'active' : ''}`}>Profile</Link>
+                    <button onClick={handleLogout} className="dropdown-item logout-btn">Logout</button>
+                </div>
+              </div>
+          </div>
+        </nav>
+      )}
+      
       <Routes>
         <Route path="/login" element={
           <PublicRoute>
